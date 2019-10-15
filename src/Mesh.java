@@ -20,7 +20,7 @@ class Mesh
 	 */
 	public Mesh(Pane pane, int CircleRowLength, int CircleColLength, Vector2 position, int width, int height, int shift)
 	{
-		linePane.setStyle("-fx-background-color:black");
+		//linePane.setStyle("-fx-background-color:black");
 		nodes = new Circle[CircleRowLength][CircleColLength];
 		for(int i = 0; i < nodes.length; i++)
 		{
@@ -123,6 +123,19 @@ class Mesh
 		
 	}
 	
+	public void setPosition(double x, double y)
+	{
+		for(int i = 0; i < nodes.length; i++)
+		{
+			for(int j = 0; j < nodes[i].length; j++)
+			{
+				nodes[i][j].setLayoutX(nodes[i][j].getLayoutX()-x);
+				nodes[i][j].setLayoutY(nodes[i][j].getLayoutY()-y);
+
+			}
+		}
+	}
+	
 	public void applyNoise(double[][] noise, double Amplitude)
 	{
 		for(int i = 0; i < nodes.length; i++)
@@ -143,6 +156,19 @@ class Mesh
 				nodes[i][j].setLayoutY(nodes[i][j].getLayoutY() - noise[i][j] * Amplitude);
 			}
 		}
+	}
+	
+	public void zoom(double scale) 
+	{
+		for(int i = 0; i < nodes.length; i++)
+		{
+			for(int j = 0; j < nodes[i].length; j++)
+			{
+				nodes[i][j].setLayoutX(nodes[i][j].getLayoutX()*scale);
+				nodes[i][j].setLayoutY(nodes[i][j].getLayoutY()*scale);
+			}
+		}
+		
 	}
 			
 }
