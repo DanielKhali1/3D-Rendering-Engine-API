@@ -20,8 +20,8 @@ import javafx.util.Duration;
 
 public class Main extends Application
 {
-	private final int CIRCLE_ROW = 50;
-	private final int CIRCLE_COL = 50;
+	private final int CIRCLE_ROW = 20;
+	private final int CIRCLE_COL = 20;
 	private final int HEIGHT = 20;
 	private final int WIDTH = 40;
 	private final int SHIFT = 20;
