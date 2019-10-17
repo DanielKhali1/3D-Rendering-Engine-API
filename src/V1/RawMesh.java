@@ -1,13 +1,13 @@
 package V1;
 
-public class Mesh 
+public class RawMesh 
 {
-	private Vector3[] vertexArray;
-	private Vector3[] faces;
-	private Vector3 CenterPoint;
+	protected Vector3[] vertexArray;
+	protected Vector3[] faces;
+	protected Vector3 CenterPoint;
 	
 
-	public Mesh(Vector3[] verticies, Vector3[] faces)
+	public RawMesh(Vector3[] verticies, Vector3[] faces)
 	{
 		this.vertexArray = verticies;
 		this.faces = faces;
@@ -26,7 +26,8 @@ public class Mesh
 			y += vertexArray[i].getY();
 			z += vertexArray[i].getZ();
 		}
-		return new Vector3 ( 	x /= vertexArray.length,
+		return new Vector3 (
+								x /= vertexArray.length,
 								y /= vertexArray.length,
 								z /= vertexArray.length
 						   );
