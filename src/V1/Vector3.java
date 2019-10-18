@@ -38,5 +38,10 @@ public class Vector3
 	{
 		return this.z;
 	}
+	
+	public String toString()
+	{
+		return x + " " + y + " " + z ;
+	}
 
 }

@@ -3,29 +3,57 @@ package V1;
 
 public class TransformMesh extends RawMesh
 {
-	Vector3 Position;
-	Vector3 Rotation;
-	Vector3 Scale;
+	private Vector3 Position;
+	private Vector3 Rotation;
+	private Vector3 Scale;
+	
 
 	public TransformMesh(Vector3[] verticies, Vector3[] faces) 
 	{
 		
 		super(verticies, faces);
 
-		this.Position = new Vector3(0, 0, 0);
-		this.Rotation = new Vector3(0, 0, 0);
-		this.Scale = new Vector3(1, 1, 1);
+		this.setPosition(new Vector3(0, 0, 0));
+		this.setRotation(new Vector3(0, 0, 0));
+		this.setScale(new Vector3(1, 1, 1));
 		
 	}
-	
-	public void Translate(Vector3 vector)
+
+	public void Translate(double x, double y, double z)
 	{
-		for(Vector3 vertex: vertexArray)
-		{
-			vertex
-		}
+		Position.set(Position.getX() + x, Position.getY() + y, Position.getZ() + z);
+	}
+	
+
+	public Vector3 getPosition() {
+		return Position;
+	}
+
+
+	public void setPosition(Vector3 position) {
+		Position = position;
+	}
+
+
+	public Vector3 getRotation() {
+		return Rotation;
+	}
+
+
+	public void setRotation(Vector3 rotation) {
+		Rotation = rotation;
+	}
+
+
+	public Vector3 getScale() {
+		return Scale;
+	}
+
+
+	public void setScale(Vector3 scale) {
+		Scale = scale;
 	}
 	
 	
-
+	
 }

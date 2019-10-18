@@ -1,9 +1,15 @@
 package V1;
 
+import V1.PresetObjects.Cube;
+import V1.PresetObjects.Quad;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 public class Display extends Application
@@ -18,10 +24,26 @@ public class Display extends Application
 	
 	public void start(Stage stage) throws Exception 
 	{		
-		RawMesh mesh = new RawMesh(verticies, faces);
-		Render renderer = new Render();
+		Cube quad = new Cube(100);
+		//Quad quad = new Quad(100, 100);
+
 		
-		renderer.render(mesh);
+		
+		quad.setPosition( new Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 1) ); 
+		quad.setScale(new Vector3(20, 20, 20));
+
+		
+		
+		Renderer renderer = new Renderer(pane, SCREEN_WIDTH, SCREEN_HEIGHT);
+		
+		//Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20), (ActionEvent event) -> 
+		//{
+		renderer.render(quad);
+
+		
+		//}));
+		//timeline.setCycleCount(Timeline.INDEFINITE);
+		//timeline.play();
 		
 		setup(stage);
 	}
