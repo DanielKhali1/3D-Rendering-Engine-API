@@ -14,14 +14,14 @@ public class Cube extends TransformMesh
 	{
 		Vector3[] vertices = new Vector3[8];
 
-		vertices[0] = new Vector3(0, 0, 1);
-		vertices[1] = new Vector3(0, width, 1);
-		vertices[2] = new Vector3(width, 0, 1);
-		vertices[3] = new Vector3(width, width, 1);
-		vertices[4] = new Vector3(0, 0, 2);
-		vertices[5] = new Vector3(0, width, 2);
-		vertices[6] = new Vector3(width, 0, 2);
-		vertices[7] = new Vector3(width, width, 2);
+		vertices[0] = new Vector3(0, 0, 0);
+		vertices[1] = new Vector3(0, width, 0);
+		vertices[2] = new Vector3(width, 0, 0);
+		vertices[3] = new Vector3(width, width, 0);
+		vertices[4] = new Vector3(0, 0, 1);
+		vertices[5] = new Vector3(0, width, 1);
+		vertices[6] = new Vector3(width, 0, 1);
+		vertices[7] = new Vector3(width, width, 1);
 		return vertices;
 	}
 	

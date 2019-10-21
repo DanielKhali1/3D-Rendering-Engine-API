@@ -33,6 +33,12 @@ public class TransformMesh extends RawMesh
 	public void setPosition(Vector3 position) {
 		Position = position;
 	}
+	
+	public void setPosition(double x, double y, double z) {
+		Position.x = x;
+		Position.y = y;
+		Position.z = z;
+	}
 
 
 	public Vector3 getRotation() {

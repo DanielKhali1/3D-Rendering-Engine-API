@@ -1,7 +1,6 @@
 package V1;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Queue;
 
 import javafx.scene.layout.Pane;
@@ -17,6 +16,9 @@ public class Renderer
 	private double width;
 	private double height;
 	
+	public double fTheta = 0;
+
+	
 	
 	/**
 	 * <p>builds a renderPane on a given pane </p>
@@ -26,7 +28,7 @@ public class Renderer
 	{
 		this.width = width;
 		this.height = height;
-		
+		 
 		pane.getChildren().add(renderPane);
 	}
 	
@@ -44,62 +46,112 @@ public class Renderer
 		renderPane.getChildren().clear();
 		
 		//project x, y ,z coords to just x, y
+
+
+		//projection matrix
+		double fNear = 0.1;
+		double fFar = 1000;
+		double fFov = 45;
+		double aspectRatio = height/width;
+		double fFovRad = 1.0 / Math.tan(fFov * 0.5 / 180 * Math.PI);
 		
+		//Vector2[] verticies = new Vector2[mesh.vertexArray.length];
+		Matrix projectionMatrix = new Matrix(new double[4][4]);
+		projectionMatrix.setCell(0, 0, aspectRatio * fFovRad);
+		projectionMatrix.setCell(1, 1, fFovRad);
+		projectionMatrix.setCell(2, 2, fFar / (fFar - fNear));
+		projectionMatrix.setCell(3, 2, (-fFar * fNear) / (fFar - fNear));
+		projectionMatrix.setCell(2, 3, 1);
+		projectionMatrix.setCell(3, 3, 0);
+		
+		Matrix ZRot = new Matrix(new double[4][4]);
+		ZRot.setCell(0, 0, Math.cos(mesh.getRotation().getZ()));
+		ZRot.setCell(0, 1, Math.sin(mesh.getRotation().getZ()));
+		ZRot.setCell(1, 0, -Math.sin(mesh.getRotation().getZ()));
+		ZRot.setCell(1, 1, Math.cos(mesh.getRotation().getZ()));
+		ZRot.setCell(2, 2, 1);
+		ZRot.setCell(3, 3, 1);
+		
+		Matrix YRot = new Matrix(new double[4][4]);
+		YRot.setCell(0, 0, Math.cos(mesh.getRotation().getY()));
+		YRot.setCell(0, 2, -Math.sin(mesh.getRotation().getY()));
+		YRot.setCell(1, 1, 1);
+		YRot.setCell(2, 0, Math.sin(mesh.getRotation().getY()));
+		YRot.setCell(2, 2, Math.cos(mesh.getRotation().getY()));
+		YRot.setCell(3, 3, 1);
 
 		
-		double aspectRatio = height/width;
-		//Vector2[] verticies = new Vector2[mesh.vertexArray.length];
+		Matrix XRot = new Matrix(new double[4][4]);
+		XRot.setCell(0, 0, 1);
+		XRot.setCell(1, 1, Math.cos(mesh.getRotation().getX()));
+		XRot.setCell(1, 2, Math.sin(mesh.getRotation().getX()));
+		XRot.setCell(2, 1, -Math.sin(mesh.getRotation().getX()));
+		XRot.setCell(2, 2, Math.cos(mesh.getRotation().getX()));
+		XRot.setCell(3, 3, 1);
+		
 		
 		for(int i = 0; i < mesh.GetFaces().length; i++)
 		{
-			//triangle verticies of specific face
-			Vector3 TV1 = mesh.vertexArray[(int)mesh.GetFaces()[i].getX()];
-			Vector3 TV2 = mesh.vertexArray[(int)mesh.GetFaces()[i].getY()];
-			Vector3 TV3 = mesh.vertexArray[(int)mesh.GetFaces()[i].getZ()];
 			
-			//apply rotation  transform to each vertex
 			
+			//triangle verticies of specific face in mesh
+			Vector3 TV1 = mesh.GetVertexArray()[(int)mesh.GetFaces()[i].getX()];
+			Vector3 TV2 = mesh.GetVertexArray()[(int)mesh.GetFaces()[i].getY()];
+			Vector3 TV3 = mesh.GetVertexArray()[(int)mesh.GetFaces()[i].getZ()];
+			
+			//rotation
 
-			//apply scale transform to each vertex
-			TV1.set(TV1.getX() * mesh.getScale().getX(), TV1.getY() * mesh.getScale().getY(), TV1.getZ() * mesh.getScale().getZ());
-			TV2.set(TV2.getX() * mesh.getScale().getX(), TV2.getY() * mesh.getScale().getY(), TV2.getZ() * mesh.getScale().getZ());
-			TV3.set(TV3.getX() * mesh.getScale().getX(), TV3.getY() * mesh.getScale().getY(), TV3.getZ() * mesh.getScale().getZ());
+			TV1 = TV1.multiplyMatrix(ZRot);
+			TV2 = TV2.multiplyMatrix(ZRot);
+			TV3 = TV3.multiplyMatrix(ZRot);
+			
+			TV1 = TV1.multiplyMatrix(XRot);
+			TV2 = TV2.multiplyMatrix(XRot);
+			TV3 = TV3.multiplyMatrix(XRot);
+			
+			TV1 = TV1.multiplyMatrix(YRot);
+			TV2 = TV2.multiplyMatrix(YRot);
+			TV3 = TV3.multiplyMatrix(YRot);
+			
+			// scale Z
+			TV1.set(TV1.x, TV1.y, TV1.z*mesh.getScale().getZ());
+			TV2.set(TV2.x, TV2.y, TV2.z*mesh.getScale().getZ());
+			TV3.set(TV3.x, TV3.y, TV3.z*mesh.getScale().getZ());
+			
+			//translate Z
+			TV1.set(TV1.x, TV1.y, TV1.z+mesh.getPosition().getZ());
+			TV2.set(TV2.x, TV2.y, TV2.z+mesh.getPosition().getZ());
+			TV3.set(TV3.x, TV3.y, TV3.z+mesh.getPosition().getZ());
+						
+			//apply projection so that the 3d object can be viewed on a 2d screen
+			TV1 = TV1.multiplyMatrix(projectionMatrix);
+			TV2 = TV2.multiplyMatrix(projectionMatrix);
+			TV3 = TV3.multiplyMatrix(projectionMatrix);
+			
+			//scale			
+			TV1.set(TV1.x * mesh.getScale().getX(), TV1.y * mesh.getScale().getY(), TV1.z);
+			TV2.set(TV2.x * mesh.getScale().getX(), TV2.y * mesh.getScale().getY(), TV2.z);
+			TV3.set(TV3.x * mesh.getScale().getX(), TV3.y * mesh.getScale().getY(), TV3.z);
 
-			//apply position transform to each vertex
-			TV1.set(TV1.getX() + mesh.getPosition().getX(), TV1.getY() + mesh.getPosition().getY(), TV1.getZ() + mesh.getPosition().getZ());
-			TV2.set(TV2.getX() + mesh.getPosition().getX(), TV2.getY() + mesh.getPosition().getY(), TV2.getZ() + mesh.getPosition().getZ());
-			TV3.set(TV3.getX() + mesh.getPosition().getX(), TV3.getY() + mesh.getPosition().getY(), TV3.getZ() + mesh.getPosition().getZ());
-
+			//translate
+			TV1.set(TV1.x+mesh.getPosition().getX(), TV1.y+mesh.getPosition().getY(), TV1.z);
+			TV2.set(TV2.x+mesh.getPosition().getX(), TV2.y+mesh.getPosition().getY(), TV2.z);
+			TV3.set(TV3.x+mesh.getPosition().getX(), TV3.y+mesh.getPosition().getY(), TV3.z);
+						
+			drawTriangle(TV1, TV2, TV3);
 			
-
-			
-			//apply 3d projection
-			System.out.println(mesh.getScale());
-			System.out.println(mesh.getPosition());
-			
-			
-			double V1x = ( aspectRatio * TV1.getX() * (1 / Math.tan(0.785)) ) / (TV1.getZ() );
-			double V2x = ( aspectRatio * TV2.getX() * (1 / Math.tan(0.785)) ) / (TV2.getZ() );
-			double V3x = ( aspectRatio * TV3.getX() * (1 / Math.tan(0.785)) ) / (TV3.getZ() );
-			
-			double V1y =  ( TV1.getY() * (1 / Math.tan(0.785)) ) / TV1.getZ();
-			double V2y =  ( TV2.getY() * (1 / Math.tan(0.785)) ) / TV2.getZ();
-			double V3y =  ( TV3.getY() * (1 / Math.tan(0.785)) ) / TV3.getZ();
-			
-			drawLines(V1x, V1y, V2x, V2y, V3x, V3y);
-			
-			System.out.println(V1x+ " " +  V1y+ " " +  V2x+ " " +  V2y+ " " +  V3x+ " " +  V3y);
 		}
 		
 		
 		
 	}
 	
-	private void drawLines(double x1, double y1, double x2, double y2, double x3, double y3)
+	private void drawTriangle(Vector3 vertex1, Vector3 vertex2, Vector3 vertex3)
 	{
-		Line side1 = new Line(x1, y1, x2, y2);
-		Line side2 = new Line(x2, y2, x3, y3);
-		Line side3 = new Line(x3, y3, x1, y1);
+		Line side1 = new Line(vertex1.getX(), vertex1.getY(), vertex2.getX(), vertex2.getY());
+		Line side2 = new Line(vertex2.getX(), vertex2.getY(), vertex3.getX(), vertex3.getY());
+		Line side3 = new Line(vertex3.getX(), vertex3.getY(), vertex1.getX(), vertex1.getY());
+
 		
 		side1.setStroke(Color.WHITE);
 		side2.setStroke(Color.WHITE);
