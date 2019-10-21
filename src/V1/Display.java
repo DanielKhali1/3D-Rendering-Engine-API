@@ -2,6 +2,7 @@ package V1;
 
 import V1.PresetObjects.Cube;
 import V1.PresetObjects.Quad;
+import V1.PresetObjects.Rectangle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -31,7 +32,7 @@ public class Display extends Application
 
 	Pane pane = new Pane();
 	Scene scene;
-	Cube quad = new Cube(1);
+	Rectangle quad = new Rectangle(2,3);
 
 	
 	public void start(Stage stage) throws Exception 

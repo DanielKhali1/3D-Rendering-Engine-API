@@ -30,6 +30,17 @@ public class Renderer
 		this.height = height;
 		 
 		pane.getChildren().add(renderPane);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 	
 	/**
