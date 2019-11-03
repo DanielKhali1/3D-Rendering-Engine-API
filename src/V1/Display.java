@@ -69,9 +69,8 @@ public class Display extends Application
 			viewControls();
 			
 			
-			//quad.setRotation(new Vector3(x, 0, y));
-			//x+= 0.02;
-			//y+= 0.04;
+			quad.setRotation(new Vector3(x, 0, y));
+			x+= 0.002;
 
 			renderer.render(quad);
 		}));
