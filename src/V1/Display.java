@@ -42,7 +42,7 @@ public class Display extends Application
 
 	Pane pane = new Pane();
 	Scene scene;
-	Terrain quad = new Terrain(10, 2, 1);
+	Cube quad = new Cube(1);
 	double i= 0;
 	
 	public void start(Stage stage) throws Exception 
@@ -70,7 +70,8 @@ public class Display extends Application
 			
 			
 			quad.setRotation(new Vector3(x, 0, y));
-			x+= 0.002;
+			x+= 0.02;
+			y+= 0.03;
 
 			renderer.render(quad);
 		}));
