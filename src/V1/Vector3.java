@@ -21,6 +21,13 @@ public class Vector3
 		this.z = 0;
 	}
 	
+	public Vector3(double components[])
+	{
+		this.x = components[0];
+		this.y = components[1];
+		this.z = components[2];
+	}
+	
 	
 	public Vector3 multiplyMatrix(Matrix matrix)
 	{

@@ -42,7 +42,7 @@ public class Display extends Application
 
 	Pane pane = new Pane();
 	Scene scene;
-	Cube quad = new Cube(1);
+	TransformMesh quad = new TransformMesh("cylindar.obj");
 	double i= 0;
 	
 	public void start(Stage stage) throws Exception 

@@ -1,5 +1,12 @@
 package V1;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Stack;
 
 public class TransformMesh extends RawMesh
 {
@@ -16,7 +23,16 @@ public class TransformMesh extends RawMesh
 		this.setPosition(new Vector3(0, 0, 0));
 		this.setRotation(new Vector3(0, 0, 0));
 		this.setScale(new Vector3(1, 1, 1));
+	}
+	
+	public TransformMesh(String filePath) 
+	{
 		
+		super(new File(filePath));
+
+		this.setPosition(new Vector3(0, 0, 0));
+		this.setRotation(new Vector3(0, 0, 0));
+		this.setScale(new Vector3(1, 1, 1));
 	}
 
 	public void Translate(double x, double y, double z)
@@ -60,6 +76,6 @@ public class TransformMesh extends RawMesh
 		Scale = scale;
 	}
 	
-	
+
 	
 }
